@@ -177,11 +177,6 @@ background-size: 1920px 948px;
             }
 
           }
-          //  .first {
-          //   .el-input__inner::-webkit-input-placeholder {
-          //        color: #666;
-          //        }
-          //   }
         }
         span {
           margin-left: 220px;

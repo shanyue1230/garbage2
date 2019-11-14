@@ -90,8 +90,17 @@
           min-width="100%"
           label="操作">
           <template v-slot="scope">
-            <!-- 编辑 -->
-           <el-button icon="el-icon-search" size="mini" type="primary" plain round @click="editDone(scope.row)">编辑</el-button>
+            <!-- 更多  编辑 创建子公司-->
+            <el-dropdown  @command="handleCommand" style="marginRight: 20px">
+              <span class="el-dropdown-link">
+                更多
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :command="{id: 'a', row: scope.row}" @command="editDone(scope.row)">编辑</el-dropdown-item>
+                <el-dropdown-item :command="{id: 'b', row: scope.row}" @command="showCreateDialog">创建子公司</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
            <!-- 停用 -->
            <el-switch
               v-model="scope.row.status"
@@ -144,6 +153,28 @@
         </div>
       </el-dialog>
 
+      <!-- 创建子公司对话框 -->
+       <el-dialog title="创建子公司" :visible.sync="createFormVisible" width="45%">
+        <el-form :label-position="labelPosition" label-width="100px" :model="editFormList" :rules="ruleForm" ref="Form">
+          <el-form-item label="行政市区" prop="urban">
+            <el-input v-model="createFormAlign.urban"></el-input>
+          </el-form-item>
+          <el-form-item label="企业分类" prop="classify">
+            <el-input v-model="createFormAlign.classify"></el-input>
+          </el-form-item>
+          <el-form-item label="企业名称" prop="naming">
+            <el-input v-model="createFormAlign.naming"></el-input>
+          </el-form-item>
+          <el-form-item label="企业编码" prop="coding">
+            <el-input v-model="createFormAlign.coding"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="createFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+        </div>
+      </el-dialog>
+
     </div>
   </div>
 </template>
@@ -187,6 +218,7 @@ export default {
         ]
       }],
       editFormVisible: false,
+      createFormVisible: false,
       labelPosition: 'right',
       editFormList: {
         urban: '',
@@ -195,6 +227,13 @@ export default {
         coding: '',
         superior: '',
         type: ''
+      },
+      // 创建子公司数据列表
+      createFormAlign: {
+        urban: '',
+        classify: '',
+        naming: '',
+        coding: ''
       },
       management: '企业单位管理',
       // 表单验证
@@ -236,6 +275,19 @@ export default {
     // 显示新增对话框
     showAddDialog () {
       this.editFormVisible = true
+    },
+    // 显示子公司对话框
+    showCreateDialog () {
+      this.createFormVisible = true
+    },
+    handleCommand ({ id, row }) {
+      // this.editDone(command)
+      console.log(id, row)
+      if (id === 'a') {
+        this.showAddDialog()
+      } else {
+        this.showCreateDialog()
+      }
     }
 
   }
